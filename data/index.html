@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anchor Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        #distance {
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+    <script>
+        async function startCalibration() {
+            try {
+                const response = await fetch('/api/startCalibration', { method: 'POST' });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert('Kalibrierung erfolgreich gestartet!');
+                } else {
+                    alert('Fehler: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Fehler beim Starten der Kalibrierung:', error);
+            }
+        }
+
+        async function getDistance() {
+            try {
+                const response = await fetch('/api/getDistance');
+                const result = await response.json();
+                if (result.status === 'success') {
+                    document.getElementById('distance').innerText = result.distance + ' cm';
+                } else {
+                    alert('Fehler: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Fehler beim Abrufen der Distanz:', error);
+            }
+        }
+
+        async function resetAnchor() {
+            try {
+                const response = await fetch('/api/resetAnchor');
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert('Anker erfolgreich zurückgesetzt!');
+                } else {
+                    alert('Fehler: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Fehler beim Zurücksetzen des Ankers:', error);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Ankerverwaltung</h1>
+    <button onclick="startCalibration()">Kalibrierung starten</button>
+    <button onclick="getDistance()">Distanz zum Tag abrufen</button>
+    <button onclick="resetAnchor()">Anker zurücksetzen</button>
+    <p>Aktuelle Distanz: <span id="distance">-</span></p>
+</body>
+</html>
